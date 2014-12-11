@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "web annotator",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "web annotator",
+    "description": "The description of the application"
+  }
+}

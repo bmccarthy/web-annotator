@@ -1,0 +1,24 @@
+background.js - has access to all of chromes api methods. able to pass messages from content-script.js to backgound (vice versa)
+    listen for action: "save", and data is json representation of the DOM including annotations
+        save DOM html to file.
+    function to take in url and return filename
+
+inject.js - Runs in context of the actual page
+
+content-script.js - Has access to page DOM but not to javascript on page.
+    Listen for click up (new text selection), and if so
+        If 'no preview' option is set, Put tags around it for current tag
+        If 'no preview' is not set, bring up preview popup that shows current words selected + and - a word. have markers for where the start and end of the selection was, allow the user to move them. and select/change tag
+    On right click open menu with options:
+        Remove <tag name 1> X
+        Edit <tag name 1> E
+        --------------------
+        Remove <tag name 2> X
+        Edit <tag name 2> E
+
+main.controller.js - javascript used in the action popup in the title bar
+    display list of tags, for each tag display name, color
+    display option to turn on/off 'no preview'
+    display option to turn off links on the page so we can tag items in links
+        $('a').click("return false;")
+        $('onbodyunload') instead of asking for unsaved changes, ask if they want to stop annotating

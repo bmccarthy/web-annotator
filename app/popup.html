@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <link href="styles/main.css" rel="stylesheet">
+  <script src="scripts/analytics.js"></script>
+</head>
+<body ng-app="web-annotator">
+
+<div ng-controller="MainController" ng-init="init()">
+
+  <div>
+    <label for="isActive">
+      <input type="checkbox" ng-model="isActive" id="isActive" ng-change="saveConfig('isActive', isActive)"/>
+      Is Active?
+    </label>
+  </div>
+
+  <div>
+    <label for="isLinksEnabled">
+      <input type="checkbox" ng-model="isLinksActive" id="isLinksEnabled"
+             ng-change="saveConfig('isLinksActive', isLinksActive)"/>
+      Links Enabled?
+    </label>
+  </div>
+
+  <div>
+    <label for="showPreview">
+      <input type="checkbox" ng-model="showPreview" id="showPreview"
+             ng-change="saveConfig('showPreview', showPreview)"/>
+      Show Preview?
+    </label>
+  </div>
+
+  <hr/>
+
+  <div>
+    <select ng-model="currentProject" ng-options="project.name for project in projects"
+            ng-change="projectChanged(currentProject)">
+      <option value="">---NEW---</option>
+    </select>
+  </div>
+
+  <div ng-show="isNew()">
+    <form name="newProjectForm" novalidate ng-submit="newProject(newProjectName)">
+      <input name="newProjectName" type="text" placeholder="Project Name" required ng-model="newProjectName"/>
+      <button type="submit">Add Project</button>
+    </form>
+  </div>
+
+  <div ng-show="!isNew()">
+    <ul>
+      <li ng-repeat="tag in currentProject.tags track by $index" style="background-color: {{tag.color}}">
+        {{tag.name}}
+        <button type="button" ng-click="deleteTag(tag)">Delete</button>
+      </li>
+      <li>
+        <form name="newTagForm" novalidate ng-submit="submitNewTag(newTag)">
+          <div>
+            <input name="newTagColor" type="color" ng-model="newTag.color" required/>
+          </div>
+
+          <div>
+            <input name="newTagName" type="text" ng-model="newTag.name" required placeholder="New Tag Name"/>
+          </div>
+
+          <button type="submit">Add Tag</button>
+        </form>
+      </li>
+    </ul>
+
+    <div>
+      <button ng-click="deleteProject(currentProject)">Delete Project</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="scripts/angular.js" data-ng-csp></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/main.controller.js"></script>
+</body>
+</html>
