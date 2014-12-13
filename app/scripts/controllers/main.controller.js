@@ -1,52 +1,5 @@
 var app = angular.module('web-annotator');
 
-app.factory('STORAGE', function ($q) {
-  return {
-    get: function (key) {
-      var deferred = $q.defer();
-
-      chrome.storage.sync.get(key, function (data) {
-        deferred.resolve(data[key]);
-      });
-
-      return deferred.promise;
-    },
-    set: function (key, value) {
-      var deferred = $q.defer();
-
-      var data = {};
-      data[key] = value;
-      chrome.storage.sync.set(data, function () {
-        deferred.resolve({});
-      });
-
-      return deferred.promise;
-    },
-    del: function (key) {
-      var deferred = $q.defer();
-
-      chrome.storage.sync.remove(key, function () {
-        deferred.resolve({});
-      });
-
-      return deferred.promise;
-    }
-  }
-});
-
-app.factory('GUID', function () {
-  return {
-    getGuid: function () {
-      function _p8(s) {
-        var p = (Math.random().toString(16) + "000000000").substr(2, 8);
-        return s ? "-" + p.substr(0, 4) + "-" + p.substr(4, 4) : p;
-      }
-
-      return _p8() + _p8(true) + _p8(true) + _p8();
-    }
-  }
-});
-
 app.controller('MainController', ['$scope', "STORAGE", "GUID", function ($scope, STORAGE, GUID) {
   var currentColorIndex = -1;
   var possibleColors = ["#ffff00", "#c30006", "#8329FD", "#8fbc8f"];
@@ -70,10 +23,9 @@ app.controller('MainController', ['$scope', "STORAGE", "GUID", function ($scope,
     $scope.currentProject = null;
 
     STORAGE.del("currentProjectId");
-    STORAGE.set("projects", $scope.projects);
   };
 
-  $scope.newProject = function (projectName) {
+  $scope.submitNewProject = function (projectName) {
 
     if (!$scope.newProjectForm.$valid) {
       return;
@@ -86,7 +38,6 @@ app.controller('MainController', ['$scope', "STORAGE", "GUID", function ($scope,
     $scope.currentProject = newProject;
 
     STORAGE.set("currentProjectId", newProject.id);
-    STORAGE.set("projects", $scope.projects);
 
     $scope.newProjectName = undefined;
   };
@@ -98,8 +49,6 @@ app.controller('MainController', ['$scope', "STORAGE", "GUID", function ($scope,
   $scope.deleteTag = function (tag) {
     var indexOfTag = $scope.currentProject.tags.indexOf(tag);
     $scope.currentProject.tags.splice(indexOfTag, 1);
-
-    STORAGE.set("projects", $scope.projects);
   };
 
   $scope.submitNewTag = function (newTag) {
@@ -108,8 +57,6 @@ app.controller('MainController', ['$scope', "STORAGE", "GUID", function ($scope,
     }
 
     $scope.currentProject.tags.push({name: newTag.name, color: newTag.color});
-
-    STORAGE.set("projects", $scope.projects);
 
     $scope.newTag.name = null;
     $scope.newTag.color = getNextColor();
@@ -179,5 +126,10 @@ app.controller('MainController', ['$scope', "STORAGE", "GUID", function ($scope,
         $scope.isActive = isActive;
       }
     });
+
+    $scope.$watch('projects', function (newVal) {
+      console.log("saving projects");
+      STORAGE.set("projects", $scope.projects);
+    }, true);
   };
 }]);

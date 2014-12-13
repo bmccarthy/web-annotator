@@ -1,1 +1,1 @@
-angular.module('web-annotator', []);
+angular.module('web-annotator', ['colorpicker.module']);

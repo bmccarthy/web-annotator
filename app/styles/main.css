@@ -2,6 +2,32 @@ body {
   padding: 20px;
 }
 
+.container {
+  width: 500px;
+}
+
 .ng-hide {
-  display: none!important;
+  display: none !important;
+}
+
+ul#tags li {
+  height: 42px;
+}
+
+ul#tags li .tagColor {
+  width: 50px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+ul#tags li .tagName {
+  margin-left: 50px;
+}
+
+#newTagColor {
+  cursor: pointer;
+  width: 50px;
 }
