@@ -35,14 +35,14 @@
   <hr/>
 
   <div class="form-group">
-    <select ng-model="currentProject" class="form-control" ng-options="project.name for project in projects"
-            ng-change="projectChanged(currentProject)">
+    <select data-ng-model="currentProject" class="form-control" data-ng-options="project.name for project in projects"
+            data-ng-change="projectChanged(currentProject)" title="Select a project">
       <option value="">New</option>
     </select>
   </div>
 
-  <form name="newProjectForm" role="form " novalidate ng-submit="submitNewProject(newProjectName)" ng-show="isNew()">
-    <div class="form-group">
+  <form name="newProjectForm" role="form" novalidate ng-submit="submitNewProject(newProjectName)" ng-show="isNew()">
+    <div class="form-group" ng-class="{ 'has-error' : newProjectForm.$invalid && !newProjectForm.$pristine }">
       <input name="newProjectName" type="text" class="form-control" placeholder="Project Name" required
              ng-model="newProjectName"/>
     </div>
@@ -54,7 +54,7 @@
       <li class="list-group-item" ng-repeat="tag in currentProject.tags track by $index">
         <div class="clearfix" ng-mouseenter="showDelete = true" ng-mouseleave="showDelete = false"
              ng-init="showDelete = false">
-          <div class="tagColor" colorpicker style="background-color: {{tag.color}}" ng-model="tag.color"></div>
+          <div class="tagColor" colorpicker style="background-color: {{tag.color}}" data-ng-model="tag.color"></div>
           <span class="tagName pull-left">{{tag.name}}</span>
           <a class="btn btn-danger btn-xs pull-right" ng-show="showDelete" ng-click="deleteTag(tag)">
             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
@@ -64,24 +64,20 @@
     </ul>
 
     <form name="newTagForm" role="form" novalidate ng-submit="submitNewTag(newTag)">
-      <div class="input-group">
+      <div class="input-group" ng-class="{ 'has-error' : newTagForm.$invalid && !newTagForm.$pristine }">
         <div id="newTagColor" colorpicker style="background-color: {{newTag.color}}" class="input-group-addon"
-             ng-model="newTag.color"></div>
+             data-ng-model="newTag.color"></div>
         <input name="newTagName" type="text" class="form-control" ng-model="newTag.name" required
                placeholder="New Tag Name"/>
-
         <span class="input-group-btn">
           <button class="btn btn-primary" type="button">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Tag
           </button>
         </span>
       </div>
-
-      <div class="form-group" style="margin-top: 15px;">
-      </div>
     </form>
 
-    <div class="form-group clearfix">
+    <div class="form-group clearfix" style="margin-top: 15px;">
       <button type="button" class="btn btn-danger pull-right" ng-click="deleteProject(currentProject)">
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete Project
       </button>
