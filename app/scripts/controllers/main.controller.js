@@ -15,7 +15,12 @@
     $scope.projects = [];
 
     $scope.saveConfig = function (key, value) {
+      console.log("saving config value. key: " + key + ", value: " + value);
       STORAGE.set(key, value);
+
+      chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {type: "update_" + key, data: value});
+      });
     };
 
     $scope.deleteProject = function (project) {
@@ -133,6 +138,14 @@
       $scope.$watch('projects', function () {
         console.log("saving projects");
         STORAGE.set("projects", $scope.projects);
+      }, true);
+
+      $scope.$watch("currentProject", function () {
+        console.log("current project changed: " + $scope.currentProject);
+
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, {type: "update_project", data: $scope.currentProject});
+        });
       }, true);
     };
   }]);

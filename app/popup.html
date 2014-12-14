@@ -22,13 +22,15 @@
 
   <div class="checkbox">
     <label>
-      <input type="checkbox" ng-model="isLinksActive" id="isLinksEnabled" ng-change="saveConfig('isLinksActive', isLinksActive)"/> Links Enabled?
+      <input type="checkbox" ng-model="isLinksActive" id="isLinksEnabled"
+             ng-change="saveConfig('isLinksActive', isLinksActive)"/> Links Enabled?
     </label>
   </div>
 
   <div class="checkbox">
     <label>
-      <input type="checkbox" ng-model="showPreview" id="showPreview" ng-change="saveConfig('showPreview', showPreview)"/> Show Preview?
+      <input type="checkbox" ng-model="showPreview" id="showPreview"
+             ng-change="saveConfig('showPreview', showPreview)"/> Show Preview?
     </label>
   </div>
 
@@ -42,11 +44,15 @@
   </div>
 
   <form name="newProjectForm" role="form" novalidate ng-submit="submitNewProject(newProjectName)" ng-show="isNew()">
-    <div class="form-group" ng-class="{ 'has-error' : newProjectForm.$invalid && !newProjectForm.$pristine }">
+    <div class="input-group" ng-class="{ 'has-error' : newProjectForm.$invalid && !newProjectForm.$pristine }">
       <input name="newProjectName" type="text" class="form-control" placeholder="Project Name" required
              ng-model="newProjectName"/>
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Project
+          </button>
+        </span>
     </div>
-    <button type="submit" class="btn btn-primary">Add Project</button>
   </form>
 
   <div ng-show="!isNew()">
