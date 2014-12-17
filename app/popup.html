@@ -13,24 +13,21 @@
 <body ng-app="web-annotator">
 
 <div class="container" ng-controller="MainController" ng-init="init()">
-
   <div class="checkbox">
     <label>
-      <input type="checkbox" ng-model="isActive" id="isActive" ng-change="saveConfig('isActive', isActive)"/> Is Active?
+      <input type="checkbox" ng-model="isActive" id="isActive"/> Is Active?
     </label>
   </div>
 
   <div class="checkbox">
     <label>
-      <input type="checkbox" ng-model="isLinksActive" id="isLinksEnabled"
-             ng-change="saveConfig('isLinksActive', isLinksActive)"/> Links Enabled?
+      <input type="checkbox" ng-model="isLinksActive" id="isLinksActive"/> Links Enabled?
     </label>
   </div>
 
   <div class="checkbox">
     <label>
-      <input type="checkbox" ng-model="showPreview" id="showPreview"
-             ng-change="saveConfig('showPreview', showPreview)"/> Show Preview?
+      <input type="checkbox" ng-model="showPreview" id="showPreview"/> Show Preview?
     </label>
   </div>
 
@@ -76,7 +73,7 @@
         <input name="newTagName" type="text" class="form-control" ng-model="newTag.name" required
                placeholder="New Tag Name"/>
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="button">
+          <button class="btn btn-primary" type="submit">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Tag
           </button>
         </span>
@@ -96,6 +93,7 @@
 <script src="scripts/angular-bootstrap-colorpicker/angular-bootstrap-colorpicker.js"></script>
 <script src="scripts/app.js"></script>
 <script src="scripts/services/GUID.js"></script>
+<script src="scripts/helpers/appStorage.js"></script>
 <script src="scripts/services/STORAGE.js"></script>
 <script src="scripts/controllers/main.controller.js"></script>
 </body>

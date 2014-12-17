@@ -4,6 +4,19 @@ chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
 });
 
-chrome.browserAction.setBadgeText({text: '\'Allo'});
+var updateBadge = function (isActive){
+  chrome.browserAction.setBadgeText({text: isActive ? "on" : "off"});
+};
 
-console.log('"Allo Allo!" Event Page for Browser Action');
+chrome.storage.sync.get("isActive", function(data){
+  updateBadge(data.isActive);
+
+  chrome.storage.onChanged.addListener(function (changes) {
+    for (var key in changes) {
+      if( key === "isActive"){
+        var storageChange = changes[key];
+        updateBadge(storageChange.newValue);
+      }
+    }
+  });
+});

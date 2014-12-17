@@ -3,7 +3,7 @@
 
   var app = angular.module('web-annotator');
 
-  app.controller('MainController', ['$scope', "STORAGE", "GUID", function ($scope, STORAGE, GUID) {
+  app.controller('MainController', ['$scope', "GUID", function ($scope, GUID) {
     var currentColorIndex = -1;
     var possibleColors = ["#ffff00", "#c30006", "#8329FD", "#8fbc8f"];
 
@@ -12,16 +12,80 @@
       return possibleColors[currentColorIndex];
     };
 
+    $scope.newTag = {color: getNextColor()};
     $scope.projects = [];
 
-    $scope.saveConfig = function (key, value) {
-      console.log("saving config value. key: " + key + ", value: " + value);
-      STORAGE.set(key, value);
-
-      chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {type: "update_" + key, data: value});
+    chrome.storage.sync.get("isActive", function(data){
+      $scope.$apply(function(){
+        $scope.isActive = data.isActive;
       });
-    };
+
+      $scope.$watch("isActive", function (isActive) {
+        console.log("popup: isActive watch fired!");
+        //chrome.browserAction.setBadgeText({text: isActive ? "on" : "off"});
+        chrome.storage.sync.set({isActive: isActive});
+      });
+    });
+
+    chrome.storage.sync.get("showPreview", function(data){
+      $scope.$apply(function(){
+        $scope.showPreview = data.showPreview;
+      });
+
+      $scope.$watch("showPreview", function (showPreview) {
+        console.log("popup: showPreview watch fired!");
+        chrome.storage.sync.set({showPreview: showPreview});
+      });
+    });
+
+    chrome.storage.sync.get("isLinksActive", function(data){
+      $scope.$apply(function(){
+        $scope.isLinksActive = data.isLinksActive;
+      });
+
+      $scope.$watch("isLinksActive", function (isLinksActive) {
+        console.log("popup: islinksactive watch fired!");
+        chrome.storage.sync.set({isLinksActive: isLinksActive});
+      });
+    });
+
+    chrome.storage.sync.get("currentProjectId", function(data){
+      var currentProjectId = data.currentProjectId;
+
+      chrome.storage.sync.get("projects", function (dataProjects) {
+        console.log("projects received: " + JSON.stringify(dataProjects));
+
+        $scope.$apply(function () {
+          $scope.projects = dataProjects.projects || [];
+        });
+
+        if (currentProjectId != null) {
+          for (var i = 0; i < $scope.projects.length; i++) {
+            if ($scope.projects[i].id === currentProjectId) {
+              $scope.$apply(function () {
+                $scope.currentProject = $scope.projects[i];
+              });
+
+              break;
+            }
+          }
+        }
+
+        $scope.$watch("projects", function (projects) {
+          console.log("popup: projects watch fired: " + JSON.stringify(projects));
+          chrome.storage.sync.set({projects: projects});
+        }, true);
+      });
+    });
+
+    chrome.storage.onChanged.addListener(function (changes) {
+      for (var key in changes) {
+        if( key === "showPreview"){
+          var storageChange = changes[key];
+          $scope.showPreview = storageChange.newValue;
+        }
+      }
+    });
 
     $scope.deleteProject = function (project) {
       console.log("project to delete: " + JSON.stringify(project));
@@ -30,7 +94,7 @@
       $scope.projects.splice(indexOfProject, 1);
       $scope.currentProject = null;
 
-      STORAGE.del("currentProjectId");
+      chrome.storage.sync.remove("currentProjectId");
     };
 
     $scope.submitNewProject = function (projectName) {
@@ -45,7 +109,7 @@
       $scope.projects.push(newProject);
       $scope.currentProject = newProject;
 
-      STORAGE.set("currentProjectId", newProject.id);
+      chrome.storage.sync.set({currentProjectId: newProject.id});
 
       $scope.newProjectName = null;
     };
@@ -74,79 +138,10 @@
       console.log("projectChanged: " + JSON.stringify(project));
 
       if (project == null) {
-        STORAGE.del("currentProjectId");
+        chrome.storage.sync.remove("currentProjectId");
       } else {
-        STORAGE.set("currentProjectId", project.id);
+        chrome.storage.sync.set({currentProjectId: project.id});
       }
-    };
-
-    $scope.init = function () {
-      console.log("initializing popup");
-
-      $scope.newTag = {color: getNextColor()};
-
-      STORAGE.get("projects").then(function (projects) {
-        $scope.projects = projects || [];
-
-        // get the current project id after the projects have all been retrieved.
-        STORAGE.get("currentProjectId").then(function (currentProjectId) {
-          var projectFound = false;
-
-          if (currentProjectId != null) {
-            for (var i = 0; i < $scope.projects.length; i++) {
-              if ($scope.projects[i].id === currentProjectId) {
-                projectFound = true;
-                $scope.currentProject = $scope.projects[i];
-                break;
-              }
-            }
-          }
-
-          if (projectFound === false) {
-            console.log('project not found: ' + currentProjectId); // TODO: what should happen in this case.
-          }
-        });
-      });
-
-      STORAGE.get("isLinksActive").then(function (isLinksActive) {
-        console.log("isLinksActive retrieved from storage: " + isLinksActive);
-        if (isLinksActive == null) {
-          $scope.isLinksActive = true;
-        } else {
-          $scope.isLinksActive = isLinksActive;
-        }
-      });
-
-      STORAGE.get("showPreview").then(function (showPreview) {
-        console.log("showPreview retrieved from storage: " + showPreview);
-        if (showPreview == null) {
-          $scope.showPreview = true;
-        } else {
-          $scope.showPreview = showPreview;
-        }
-      });
-
-      STORAGE.get("isActive").then(function (isActive) {
-        console.log("isActive retrieved from storage: " + isActive);
-        if (isActive == null) {
-          $scope.isActive = true;
-        } else {
-          $scope.isActive = isActive;
-        }
-      });
-
-      $scope.$watch('projects', function () {
-        console.log("saving projects");
-        STORAGE.set("projects", $scope.projects);
-      }, true);
-
-      $scope.$watch("currentProject", function () {
-        console.log("current project changed: " + $scope.currentProject);
-
-        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, {type: "update_project", data: $scope.currentProject});
-        });
-      }, true);
     };
   }]);
 })();

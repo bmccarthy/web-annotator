@@ -1,7 +1,8 @@
-var createModal = function () {
+var createModal = function(){
 
   var div_webAnnotatorModal = document.createElement('div');
   div_webAnnotatorModal.style.display = "none";
+  div_webAnnotatorModal.style.textAlign = "left";
   div_webAnnotatorModal.style.WebkitBoxSizing = "border-box";
   div_webAnnotatorModal.style.MozBoxSizing = "border-box";
   div_webAnnotatorModal.style.boxSizing = "border-box";
@@ -14,20 +15,27 @@ var createModal = function () {
   div_webAnnotatorModal.style.overflow = "hidden";
   div_webAnnotatorModal.style.WebkitOverflowScrolling = "touch";
   div_webAnnotatorModal.style.outline = 0;
+  div_webAnnotatorModal.className = "modal";
   div_webAnnotatorModal.id = "web-annotator-modal";
 
   var div_0 = document.createElement('div');
   div_0.style.WebkitBoxSizing = "border-box";
   div_0.style.MozBoxSizing = "border-box";
   div_0.style.boxSizing = "border-box";
+  div_0.style.float = "right";
+  div_0.style.fontSize = "21px";
+  div_0.style.fontWeight = 700;
+  div_0.style.lineHeight = 1;
+  div_0.style.color = "#000";
+  div_0.style.textShadow = "0 1px 0 #fff";
+  div_0.style.filter = "alpha(opacity=20)";
+  div_0.style.opacity = ".2";
   div_0.style.position = "absolute";
   div_0.style.top = 0;
   div_0.style.right = 0;
   div_0.style.left = 0;
   div_0.style.backgroundColor = "#000";
-  div_0.onclick = function(){
-    document.getElementById('web-annotator-modal').style.display = 'none'
-  };
+  div_0.className = "modal-backdrop close";
   div_webAnnotatorModal.appendChild( div_0 );
 
 
@@ -38,6 +46,13 @@ var createModal = function () {
   div_1.style.boxSizing = "border-box";
   div_1.style.position = "relative";
   div_1.style.margin = "10px";
+  div_1.className = "modal-dialog";
+
+  var form_0 = document.createElement('form');
+  form_0.style.WebkitBoxSizing = "border-box";
+  form_0.style.MozBoxSizing = "border-box";
+  form_0.style.boxSizing = "border-box";
+  form_0.novalidate = "novalidate";
 
   var div_2 = document.createElement('div');
   div_2.style.WebkitBoxSizing = "border-box";
@@ -52,6 +67,7 @@ var createModal = function () {
   div_2.style.outline = 0;
   div_2.style.WebkitBoxShadow = "0 5px 15px rgba(0,0,0,.5)";
   div_2.style.boxShadow = "0 5px 15px rgba(0,0,0,.5)";
+  div_2.className = "modal-content";
 
   var div_3 = document.createElement('div');
   div_3.style.WebkitBoxSizing = "border-box";
@@ -60,6 +76,7 @@ var createModal = function () {
   div_3.style.minHeight = "16.43px";
   div_3.style.padding = "15px";
   div_3.style.borderBottom = "1px solid #e5e5e5";
+  div_3.className = "modal-header";
 
   var button_0 = document.createElement('button');
   button_0.style.WebkitBoxSizing = "border-box";
@@ -84,16 +101,14 @@ var createModal = function () {
   button_0.style.background = "0 0";
   button_0.style.border = 0;
   button_0.style.marginTop = "-2px";
-  button_0.onclick = function(){
-    document.getElementById('web-annotator-modal').style.display = 'none'
-  };
+  button_0.className = "close";
   button_0.type = "button";
 
   var span_0 = document.createElement('span');
   span_0.style.WebkitBoxSizing = "border-box";
   span_0.style.MozBoxSizing = "border-box";
   span_0.style.boxSizing = "border-box";
-  span_0.appendChild( document.createTextNode("x") );
+  span_0.appendChild( document.createTextNode("�") );
   button_0.appendChild( span_0 );
 
   div_3.appendChild( button_0 );
@@ -111,6 +126,7 @@ var createModal = function () {
   h4_0.style.marginBottom = "10px";
   h4_0.style.fontSize = "18px";
   h4_0.style.margin = 0;
+  h4_0.className = "modal-title";
   h4_0.appendChild( document.createTextNode("New Tag") );
   div_3.appendChild( h4_0 );
 
@@ -123,18 +139,20 @@ var createModal = function () {
   div_4.style.boxSizing = "border-box";
   div_4.style.position = "relative";
   div_4.style.padding = "15px";
+  div_4.className = "modal-body";
 
-  var form_0 = document.createElement('form');
-  form_0.style.WebkitBoxSizing = "border-box";
-  form_0.style.MozBoxSizing = "border-box";
-  form_0.style.boxSizing = "border-box";
-  form_0.role = "form";
+  var form_1 = document.createElement('form');
+  form_1.style.WebkitBoxSizing = "border-box";
+  form_1.style.MozBoxSizing = "border-box";
+  form_1.style.boxSizing = "border-box";
+  form_1.role = "form";
 
   var div_5 = document.createElement('div');
   div_5.style.WebkitBoxSizing = "border-box";
   div_5.style.MozBoxSizing = "border-box";
   div_5.style.boxSizing = "border-box";
   div_5.style.marginBottom = "15px";
+  div_5.className = "form-group";
 
   var input_webAnnotatorInput = document.createElement('input');
   input_webAnnotatorInput.disabled = "disabled";
@@ -163,11 +181,12 @@ var createModal = function () {
   input_webAnnotatorInput.style.transition = "border-color ease-in-out .15s,box-shadow ease-in-out .15s";
   input_webAnnotatorInput.style.cursor = "not-allowed";
   input_webAnnotatorInput.style.opacity = 1;
+  input_webAnnotatorInput.className = "form-control";
   input_webAnnotatorInput.type = "text";
   input_webAnnotatorInput.id = "web-annotator-input";
   div_5.appendChild( input_webAnnotatorInput );
 
-  form_0.appendChild( div_5 );
+  form_1.appendChild( div_5 );
 
 
   var div_6 = document.createElement('div');
@@ -175,6 +194,7 @@ var createModal = function () {
   div_6.style.MozBoxSizing = "border-box";
   div_6.style.boxSizing = "border-box";
   div_6.style.marginBottom = "15px";
+  div_6.className = "form-group";
 
   var select_webAnnotatorTags = document.createElement('select');
   select_webAnnotatorTags.style.WebkitBoxSizing = "border-box";
@@ -201,34 +221,11 @@ var createModal = function () {
   select_webAnnotatorTags.style.OTransition = "border-color ease-in-out .15s,box-shadow ease-in-out .15s";
   select_webAnnotatorTags.style.transition = "border-color ease-in-out .15s,box-shadow ease-in-out .15s";
   select_webAnnotatorTags.style.background = "#fff!important";
+  select_webAnnotatorTags.className = "form-control";
   select_webAnnotatorTags.id = "web-annotator-tags";
-
-  var option_0 = document.createElement('option');
-  option_0.style.WebkitBoxSizing = "border-box";
-  option_0.style.MozBoxSizing = "border-box";
-  option_0.style.boxSizing = "border-box";
-  option_0.appendChild( document.createTextNode("Tag 1") );
-  select_webAnnotatorTags.appendChild( option_0 );
-
-
-  var option_1 = document.createElement('option');
-  option_1.style.WebkitBoxSizing = "border-box";
-  option_1.style.MozBoxSizing = "border-box";
-  option_1.style.boxSizing = "border-box";
-  option_1.appendChild( document.createTextNode("Tag 2") );
-  select_webAnnotatorTags.appendChild( option_1 );
-
-
-  var option_2 = document.createElement('option');
-  option_2.style.WebkitBoxSizing = "border-box";
-  option_2.style.MozBoxSizing = "border-box";
-  option_2.style.boxSizing = "border-box";
-  option_2.appendChild( document.createTextNode("Tag 3") );
-  select_webAnnotatorTags.appendChild( option_2 );
-
   div_6.appendChild( select_webAnnotatorTags );
 
-  form_0.appendChild( div_6 );
+  form_1.appendChild( div_6 );
 
 
   var div_7 = document.createElement('div');
@@ -239,6 +236,7 @@ var createModal = function () {
   div_7.style.display = "block";
   div_7.style.marginTop = "10px";
   div_7.style.marginBottom = "10px";
+  div_7.className = "checkbox";
 
   var label_0 = document.createElement('label');
   label_0.style.WebkitBoxSizing = "border-box";
@@ -263,19 +261,19 @@ var createModal = function () {
   input_webAnnotatorShowPreview.style.fontFamily = "inherit";
   input_webAnnotatorShowPreview.style.fontSize = "inherit";
   input_webAnnotatorShowPreview.style.padding = 0;
-  input_webAnnotatorShowPreview.style.marginTop = "4px";
+  input_webAnnotatorShowPreview.style.marginTop = "4px \9";
   input_webAnnotatorShowPreview.style.position = "absolute";
   input_webAnnotatorShowPreview.style.marginLeft = "-20px";
   input_webAnnotatorShowPreview.type = "checkbox";
   input_webAnnotatorShowPreview.id = "web-annotator-show-preview";
   label_0.appendChild( input_webAnnotatorShowPreview );
 
-  label_0.appendChild( document.createTextNode(" Show Preview?") );
+  label_0.appendChild( document.createTextNode(" Show Preview?\n              ") );
   div_7.appendChild( label_0 );
 
-  form_0.appendChild( div_7 );
+  form_1.appendChild( div_7 );
 
-  div_4.appendChild( form_0 );
+  div_4.appendChild( form_1 );
 
   div_2.appendChild( div_4 );
 
@@ -287,6 +285,7 @@ var createModal = function () {
   div_8.style.padding = "15px";
   div_8.style.textAlign = "right";
   div_8.style.borderTop = "1px solid #e5e5e5";
+  div_8.className = "modal-footer";
 
   var button_1 = document.createElement('button');
   button_1.style.WebkitBoxSizing = "border-box";
@@ -294,18 +293,18 @@ var createModal = function () {
   button_1.style.boxSizing = "border-box";
   button_1.style.margin = 0;
   button_1.style.font = "inherit";
-  button_1.style.color = "#333";
+  button_1.style.color = "#000";
   button_1.style.overflow = "visible";
   button_1.style.textTransform = "none";
-  button_1.style.WebkitAppearance = "button";
+  button_1.style.WebkitAppearance = "none";
   button_1.style.cursor = "pointer";
   button_1.style.fontFamily = "inherit";
-  button_1.style.fontSize = "14px";
-  button_1.style.lineHeight = 1.42857143;
+  button_1.style.fontSize = "21px";
+  button_1.style.lineHeight = 1;
   button_1.style.display = "inline-block";
-  button_1.style.padding = "6px 12px";
+  button_1.style.padding = 0;
   button_1.style.marginBottom = 0;
-  button_1.style.fontWeight = 400;
+  button_1.style.fontWeight = 700;
   button_1.style.textAlign = "center";
   button_1.style.whiteSpace = "nowrap";
   button_1.style.verticalAlign = "middle";
@@ -316,65 +315,67 @@ var createModal = function () {
   button_1.style.MsUserSelect = "none";
   button_1.style.userSelect = "none";
   button_1.style.backgroundImage = "none";
-  button_1.style.border = "1px solid transparent";
+  button_1.style.border = 0;
   button_1.style.borderRadius = "4px";
   button_1.style.backgroundColor = "#fff";
   button_1.style.borderColor = "#ccc";
-  button_1.onclick = function(){
-    document.getElementById('web-annotator-modal').style.display = 'none'
-  };
+  button_1.style.float = "right";
+  button_1.style.textShadow = "0 1px 0 #fff";
+  button_1.style.filter = "alpha(opacity=20)";
+  button_1.style.opacity = ".2";
+  button_1.style.background = "0 0";
+  button_1.className = "btn btn-default close";
   button_1.type = "button";
   button_1.appendChild( document.createTextNode("Close") );
   div_8.appendChild( button_1 );
 
 
-  var button_2 = document.createElement('button');
-  button_2.style.WebkitBoxSizing = "border-box";
-  button_2.style.MozBoxSizing = "border-box";
-  button_2.style.boxSizing = "border-box";
-  button_2.style.margin = 0;
-  button_2.style.font = "inherit";
-  button_2.style.color = "#fff";
-  button_2.style.overflow = "visible";
-  button_2.style.textTransform = "none";
-  button_2.style.WebkitAppearance = "button";
-  button_2.style.cursor = "pointer";
-  button_2.style.fontFamily = "inherit";
-  button_2.style.fontSize = "14px";
-  button_2.style.lineHeight = 1.42857143;
-  button_2.style.display = "inline-block";
-  button_2.style.padding = "6px 12px";
-  button_2.style.marginBottom = 0;
-  button_2.style.fontWeight = 400;
-  button_2.style.textAlign = "center";
-  button_2.style.whiteSpace = "nowrap";
-  button_2.style.verticalAlign = "middle";
-  button_2.style.MsTouchAction = "manipulation";
-  button_2.style.touchAction = "manipulation";
-  button_2.style.WebkitUserSelect = "none";
-  button_2.style.MozUserSelect = "none";
-  button_2.style.MsUserSelect = "none";
-  button_2.style.userSelect = "none";
-  button_2.style.backgroundImage = "none";
-  button_2.style.border = "1px solid transparent";
-  button_2.style.borderRadius = "4px";
-  button_2.style.backgroundColor = "#337ab7";
-  button_2.style.borderColor = "#2e6da4";
-  button_2.style.marginLeft = "5px";
-  button_2.onclick = function(){
-    document.getElementById('web-annotator-modal').style.display = 'none'
-  };
-  button_2.type = "button";
-  button_2.appendChild( document.createTextNode("Tag") );
-  div_8.appendChild( button_2 );
+  var button_webAnnotatorSubmit = document.createElement('button');
+  button_webAnnotatorSubmit.style.WebkitBoxSizing = "border-box";
+  button_webAnnotatorSubmit.style.MozBoxSizing = "border-box";
+  button_webAnnotatorSubmit.style.boxSizing = "border-box";
+  button_webAnnotatorSubmit.style.margin = 0;
+  button_webAnnotatorSubmit.style.font = "inherit";
+  button_webAnnotatorSubmit.style.color = "#fff";
+  button_webAnnotatorSubmit.style.overflow = "visible";
+  button_webAnnotatorSubmit.style.textTransform = "none";
+  button_webAnnotatorSubmit.style.WebkitAppearance = "button";
+  button_webAnnotatorSubmit.style.cursor = "pointer";
+  button_webAnnotatorSubmit.style.fontFamily = "inherit";
+  button_webAnnotatorSubmit.style.fontSize = "14px";
+  button_webAnnotatorSubmit.style.lineHeight = 1.42857143;
+  button_webAnnotatorSubmit.style.display = "inline-block";
+  button_webAnnotatorSubmit.style.padding = "6px 12px";
+  button_webAnnotatorSubmit.style.marginBottom = 0;
+  button_webAnnotatorSubmit.style.fontWeight = 400;
+  button_webAnnotatorSubmit.style.textAlign = "center";
+  button_webAnnotatorSubmit.style.whiteSpace = "nowrap";
+  button_webAnnotatorSubmit.style.verticalAlign = "middle";
+  button_webAnnotatorSubmit.style.MsTouchAction = "manipulation";
+  button_webAnnotatorSubmit.style.touchAction = "manipulation";
+  button_webAnnotatorSubmit.style.WebkitUserSelect = "none";
+  button_webAnnotatorSubmit.style.MozUserSelect = "none";
+  button_webAnnotatorSubmit.style.MsUserSelect = "none";
+  button_webAnnotatorSubmit.style.userSelect = "none";
+  button_webAnnotatorSubmit.style.backgroundImage = "none";
+  button_webAnnotatorSubmit.style.border = "1px solid transparent";
+  button_webAnnotatorSubmit.style.borderRadius = "4px";
+  button_webAnnotatorSubmit.style.backgroundColor = "#337ab7";
+  button_webAnnotatorSubmit.style.borderColor = "#2e6da4";
+  button_webAnnotatorSubmit.style.marginLeft = "5px";
+  button_webAnnotatorSubmit.className = "btn btn-primary";
+  button_webAnnotatorSubmit.type = "button";
+  button_webAnnotatorSubmit.id = "web-annotator-submit";
+  button_webAnnotatorSubmit.appendChild( document.createTextNode("Tag") );
+  div_8.appendChild( button_webAnnotatorSubmit );
 
   div_2.appendChild( div_8 );
 
-  div_1.appendChild( div_2 );
+  form_0.appendChild( div_2 );
+
+  div_1.appendChild( form_0 );
 
   div_webAnnotatorModal.appendChild( div_1 );
 
   document.body.appendChild( div_webAnnotatorModal );
-
-
-}
+};
