@@ -25,19 +25,18 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "css": [
-        "styles/main.css"
-      ],
       "js": [
         "scripts/jquery-2.1.1.js",
         "scripts/rangy/rangy-core.js",
         "scripts/rangy/rangy-classapplier.js",
-        "scripts/annotator-modal.js",
         "scripts/contentscript.js"
       ],
       "run_at": "document_end",
       "all_frames": false
     }
+  ],
+  "web_accessible_resources": [
+    "web-annotator-modal.html", "styles/bootstrap/css/bootstrap.min.css"
   ],
   "permissions": [
     "tabs",
