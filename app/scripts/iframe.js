@@ -1,10 +1,10 @@
 (function () {
   var pageOrigin;
 
-  $("#web-annotator-modal").on("submit", function () {
+  $('#web-annotator-modal').on('submit', function () {
 
-    var tag = $("#web-annotator-tag").val();
-    var text = $("#web-annotator-input").val();
+    var tag = $('#web-annotator-tag').val();
+    var text = $('#web-annotator-input').val();
 
     var newAnnotation = {
       newAnnotation: {
@@ -20,7 +20,7 @@
     window.parent.postMessage({}, pageOrigin);
   });
 
-  $("body").on("keyup", function (e) {
+  $('body').on('keyup', function (e) {
     if (e.keyCode == 27) {
       window.parent.postMessage({}, pageOrigin);
     }
@@ -32,33 +32,30 @@
       return;
     }
 
-    console.log("new tag annotation requested: ");
+    console.log('new tag annotation requested: ');
     console.log(e);
 
     if (e.data.tags != null) {
 
-      var options = "";
+      var options = '';
       $.each(e.data.tags, function (i, item) {
-        options += "<option>" + item.name + "</option>";
+        options += '<option>' + item.name + '</option>';
       });
 
-      $("#web-annotator-tag").html(options);
+      $('#web-annotator-tag').html(options);
     }
 
     if (e.data.currentTag != null) {
-      if (e.data.currentTag.trim() !== "") {
-        $("#web-annotator-tag").val(e.data.currentTag);
+      if (e.data.currentTag.trim() !== '') {
+        $('#web-annotator-tag').val(e.data.currentTag);
       }
     }
 
     if (e.data.selectedText != null) {
-      $("#web-annotator-input").val(e.data.selectedText);
+      $('#web-annotator-input').val(e.data.selectedText);
       pageOrigin = e.origin;
     }
-
-    //console.log("message recieved in annotation modal: ");
-    //console.log(e);
   }, false);
 
-  $("#web-annotator-modal").modal({backdrop: false, keyboard: false, show: true});
+  $('#web-annotator-modal').modal({backdrop: false, keyboard: false, show: true});
 })();

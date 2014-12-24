@@ -11,7 +11,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 });
 
 var updateBadge = function (isActive) {
-  chrome.browserAction.setBadgeText({text: isActive ? "on" : "off"});
+  chrome.browserAction.setBadgeText({text: isActive ? 'on' : 'off'});
 };
 
 var sendToEachTab = function (message) {
@@ -27,9 +27,9 @@ var onIsActiveChanged = function (active) {
   updateBadge(active);
 
   if (active) {
-    sendToEachTab({type: "activate", project: currentProject});
+    sendToEachTab({type: 'activate', project: currentProject});
   } else {
-    sendToEachTab({type: "deactivate"});
+    sendToEachTab({type: 'deactivate'});
   }
 };
 
@@ -48,38 +48,38 @@ var onCurrentProjectChanged = function (currentProjectId) {
     currentProject = null;
   }
 
-  sendToEachTab({type: "project_changed", project: currentProject});
+  sendToEachTab({type: 'project_changed', project: currentProject});
 };
 
 var onIsLinksActiveChanged = function (linksActive) {
   isLinksActive = linksActive;
-  sendToEachTab({type: "toggle_links_active", isLinksActive: isLinksActive});
+  sendToEachTab({type: 'toggle_links_active', isLinksActive: isLinksActive});
 };
 
 var onShowPreviewChanged = function (sp) {
   showPreview = sp;
-  sendToEachTab({type: "toggle_show_preview", showPreview: sp});
+  sendToEachTab({type: 'toggle_show_preview', showPreview: sp});
 };
 
 function handleMessage(request, sender, sendResponse){
-  console.log("Message received in background: " + JSON.stringify(request));
+  console.log('Message received in background: ' + JSON.stringify(request));
 }
 
 chrome.runtime.onMessage.addListener(handleMessage);
 
-chrome.storage.sync.get("isActive", function (data) {
+chrome.storage.sync.get('isActive', function (data) {
   onIsActiveChanged(data.isActive === true);
 });
 
-chrome.storage.sync.get("showPreview", function (data) {
+chrome.storage.sync.get('showPreview', function (data) {
   onShowPreviewChanged(data.showPreview == null || data.showPreview === true);
 });
 
-chrome.storage.sync.get("isLinksActive", function (data) {
+chrome.storage.sync.get('isLinksActive', function (data) {
   onIsLinksActiveChanged(data.isLinksActive == null || data.isLinksActive);
 });
 
-chrome.storage.sync.get("projects", function (projectsData) {
+chrome.storage.sync.get('projects', function (projectsData) {
   if (projectsData.projects == null) {
     projects = [];
     currentProject = null;
@@ -88,7 +88,7 @@ chrome.storage.sync.get("projects", function (projectsData) {
 
   projects = projectsData.projects || [];
 
-  chrome.storage.sync.get("currentProjectId", function (data) {
+  chrome.storage.sync.get('currentProjectId', function (data) {
     var currentProjectId = data.currentProjectId;
 
     if (currentProjectId == null) {
@@ -98,13 +98,13 @@ chrome.storage.sync.get("projects", function (projectsData) {
 
     for (var i = 0; i < projectsData.projects.length; i++) {
       if (projectsData.projects[i].id === currentProjectId) {
-        console.log("setting project: " + JSON.stringify(projectsData.projects[i]));
+        console.log('setting project: ' + JSON.stringify(projectsData.projects[i]));
         currentProject = projectsData.projects[i];
         return;
       }
     }
 
-    console.log("setting project: null");
+    console.log('setting project: null');
     currentProject = null;
   });
 });
@@ -112,22 +112,22 @@ chrome.storage.sync.get("projects", function (projectsData) {
 chrome.storage.onChanged.addListener(function (changes) {
   for (var key in changes) {
     switch (key) {
-      case "isActive":
+      case 'isActive':
         onIsActiveChanged(changes[key].newValue);
         break;
-      case "showPreview":
+      case 'showPreview':
         onShowPreviewChanged(changes[key].newValue);
         break;
-      case  "projects":
+      case  'projects':
         break;
-      case "isLinksActive":
+      case 'isLinksActive':
         onIsLinksActiveChanged(changes[key].newValue);
         break;
-      case "currentProjectId":
+      case 'currentProjectId':
         onCurrentProjectChanged(changes[key].newValue);
         break;
       default:
-        console.log("unknown storage item changed: " + JSON.stringify(changes));
+        console.log('unknown storage item changed: ' + JSON.stringify(changes));
         break;
     }
   }
