@@ -13,11 +13,7 @@
       }
     };
 
-    console.log("new annotation submitted.");
-
     window.parent.postMessage(newAnnotation, pageOrigin);
-
-    console.log("new annotation after submitted.");
   });
 
   $('.js-close').on('click', function (e) {

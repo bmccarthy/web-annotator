@@ -86,6 +86,13 @@ var tagCurrentText = function (tag) {
 };
 
 var handleMouseUp = function (e) {
+  if (e.ctrlKey !== true) {
+    return;
+  }
+
+  console.log("mouse up: ");
+  console.log(e);
+
   if (hasBeenInit === false) {
     return;
   }
@@ -117,7 +124,7 @@ var handleMouseUp = function (e) {
 
           $webAnnotatorFrame[0].contentWindow.postMessage({
             tags: currentProject.tags,
-            currentTag: "",
+            currentTag: currentTag,
             selectedText: selectionString
           }, extensionUrl);
 
@@ -148,6 +155,9 @@ var initialize = function () {
   $("body").append(iframe);
 
   $("body").on("keyup", function (e) {
+    //console.log("keyup: ");
+    //console.log(e);
+
     // hide the modal on escape
     if (e.keyCode == 27) {
       hideModal();
