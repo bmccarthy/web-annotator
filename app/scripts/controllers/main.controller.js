@@ -15,8 +15,8 @@
     $scope.newTag = {color: getNextColor()};
     $scope.projects = [];
 
-    chrome.storage.sync.get("isActive", function(data){
-      $scope.$apply(function(){
+    chrome.storage.sync.get("isActive", function (data) {
+      $scope.$apply(function () {
         $scope.isActive = data.isActive;
       });
 
@@ -27,8 +27,8 @@
       });
     });
 
-    chrome.storage.sync.get("showPreview", function(data){
-      $scope.$apply(function(){
+    chrome.storage.sync.get("showPreview", function (data) {
+      $scope.$apply(function () {
         $scope.showPreview = data.showPreview;
       });
 
@@ -38,8 +38,8 @@
       });
     });
 
-    chrome.storage.sync.get("isLinksActive", function(data){
-      $scope.$apply(function(){
+    chrome.storage.sync.get("isLinksActive", function (data) {
+      $scope.$apply(function () {
         $scope.isLinksActive = data.isLinksActive;
       });
 
@@ -49,7 +49,7 @@
       });
     });
 
-    chrome.storage.sync.get("currentProjectId", function(data){
+    chrome.storage.sync.get("currentProjectId", function (data) {
       var currentProjectId = data.currentProjectId;
 
       chrome.storage.sync.get("projects", function (dataProjects) {
@@ -80,9 +80,12 @@
 
     chrome.storage.onChanged.addListener(function (changes) {
       for (var key in changes) {
-        if( key === "showPreview"){
+        if (key === "showPreview") {
           var storageChange = changes[key];
-          $scope.showPreview = storageChange.newValue;
+
+          $scope.$apply(function () {
+            $scope.showPreview = storageChange.newValue;
+          });
         }
       }
     });
