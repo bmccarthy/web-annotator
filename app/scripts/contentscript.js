@@ -44,6 +44,17 @@
         currentProject = msg.project;
         //initialize();
         break;
+      case 'isLinksActive_changed':
+        if (msg.isLinksActive === false) {
+          $('a[href]').each(function () {
+            $(this).attr('href-web-annotator', $(this).attr('href')).removeAttr('href');
+          });
+        } else {
+          $('a[href-web-annotator]').each(function () {
+            $(this).attr('href', $(this).attr('href-web-annotator')).removeAttr('href-web-annotator');
+          });
+        }
+        break;
       default:
         console.log('unknown message: ' + JSON.stringify(msg));
         break;
@@ -144,7 +155,8 @@
 
     var frameStyle = 'width:100%; height: 100%; position: fixed; top:0;bottom:0;right:0;left:0; border:none; margin:0; background-color: transparent; overflow: hidden; z-index: 2147483647; display:none;';
     var iframe = $('<iframe id="web-annotator-frame" style="' + frameStyle + '" frameborder="0" allowTransparency="true"></iframe>');
-    iframe.attr('src', chrome.extension.getURL('web-annotator-modal-ng.html'));
+    iframe.attr('src', chrome.extension.getURL('web-annotator-modal-ng.html') + '?url=' + document.location.origin);
+
     $('body').append(iframe);
 
     $webAnnotatorFrame = $('#web-annotator-frame');

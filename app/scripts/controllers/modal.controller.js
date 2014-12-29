@@ -67,9 +67,16 @@
     $scope.currentTag = "";
     $scope.isInEditMode = false;
 
-    var pageOrigin;
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
 
     var sendMessageToPage = function (msg) {
+
+      var pageOrigin = getParameterByName("url");
       if (pageOrigin == null) {
         return;
       }
@@ -127,8 +134,6 @@
       if (e.data == null) {
         return;
       }
-
-      pageOrigin = e.origin;
 
       if (e.data.tags != null) {
         $scope.$apply(function () {

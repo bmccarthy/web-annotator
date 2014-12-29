@@ -102,6 +102,9 @@
         case 'currentProjectId':
           onCurrentProjectChanged(changes[key].newValue);
           break;
+        case 'isLinksActive':
+          sendToEachTab({'type': 'isLinksActive_changed', 'isLinksActive': changes[key].newValue});
+          break;
         default:
           break;
       }

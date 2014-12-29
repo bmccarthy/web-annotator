@@ -4,7 +4,7 @@
     "description": "The name of the application"
   },
   "appDescription": {
-    "message": "Tool to annodate web pages",
+    "message": "Tool to annotate web pages",
     "description": "The description of the application"
   }
 }
