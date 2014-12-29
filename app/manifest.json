@@ -19,7 +19,7 @@
       "19": "icons/icon-19.png",
       "38": "icons/icon-38.png"
     },
-    "default_title": "web annotator",
+    "default_title": "Web Annotator",
     "default_popup": "popup.html"
   },
   "content_scripts": [
@@ -42,6 +42,7 @@
   "permissions": [
     "tabs",
     "<all_urls>",
-    "storage"
+    "storage",
+    "downloads"
   ]
 }

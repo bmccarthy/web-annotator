@@ -21,8 +21,6 @@
       });
 
       $scope.$watch("isActive", function (isActive) {
-        console.log("popup: isActive watch fired!");
-        //chrome.browserAction.setBadgeText({text: isActive ? "on" : "off"});
         chrome.storage.sync.set({isActive: isActive});
       });
     });
@@ -33,7 +31,6 @@
       });
 
       $scope.$watch("showPreview", function (showPreview) {
-        console.log("popup: showPreview watch fired!");
         chrome.storage.sync.set({showPreview: showPreview});
       });
     });
@@ -44,7 +41,6 @@
       });
 
       $scope.$watch("isLinksActive", function (isLinksActive) {
-        console.log("popup: islinksactive watch fired!");
         chrome.storage.sync.set({isLinksActive: isLinksActive});
       });
     });
@@ -53,8 +49,6 @@
       var currentProjectId = data.currentProjectId;
 
       chrome.storage.sync.get("projects", function (dataProjects) {
-        console.log("projects received: " + JSON.stringify(dataProjects));
-
         $scope.$apply(function () {
           $scope.projects = dataProjects.projects || [];
         });
@@ -91,8 +85,6 @@
     });
 
     $scope.deleteProject = function (project) {
-      console.log("project to delete: " + JSON.stringify(project));
-
       var indexOfProject = $scope.projects.indexOf(project);
       $scope.projects.splice(indexOfProject, 1);
       $scope.currentProject = null;
@@ -126,6 +118,16 @@
       $scope.currentProject.tags.splice(indexOfTag, 1);
     };
 
+    $scope.saveAnnotations = function () {
+      var webAnnotationAppId = "fakpbpihhocofbjfklppdppncmbbhjje";
+
+      chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {type: "get_html"}, function (response) {
+          chrome.runtime.sendMessage(webAnnotationAppId, response);
+        });
+      });
+    };
+
     $scope.submitNewTag = function (newTag) {
       if (!$scope.newTagForm.$valid) {
         return;
@@ -138,8 +140,6 @@
     };
 
     $scope.projectChanged = function (project) {
-      console.log("projectChanged: " + JSON.stringify(project));
-
       if (project == null) {
         chrome.storage.sync.remove("currentProjectId");
       } else {

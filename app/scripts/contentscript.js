@@ -21,15 +21,16 @@
    * @param sendResponse
    */
   function handleChromeMessage(msg, sender, sendResponse) {
-    console.log('message recieved in content script: ' + JSON.stringify(msg));
-
     if (!msg.type) {
       return;
     }
 
     switch (msg.type) {
-      case 'report_back':
-        sendResponse(document.all[0].outerHTML);
+      case 'get_html':
+        var html = document.documentElement.outerHTML;
+        //var html2 = $('html')[0].outerHTML;
+
+        sendResponse(html);
         break;
       case 'deactivate':
         currentProject = null;
@@ -117,8 +118,6 @@
    */
   function tagCurrentText(tag) {
 
-    console.log('tagging current text with current tag: ' + tag);
-
     if (tag == null || tag == '') {
       return;
     }
@@ -141,8 +140,6 @@
 
     rangy.init();
 
-    console.log('initializing web annotator: ' + JSON.stringify(currentProject));
-
     updateStyles();
 
     var frameStyle = 'width:100%; height: 100%; position: fixed; top:0;bottom:0;right:0;left:0; border:none; margin:0; background-color: transparent; overflow: hidden; z-index: 2147483647; display:none;';
@@ -164,9 +161,6 @@
       if (e.origin !== extensionUrl) {
         return;
       }
-
-      console.log('message recieved from new annotation modal: ');
-      console.log(e);
 
       if (e.data.newAnnotation != null) {
         currentTag = e.data.newAnnotation.tag;
@@ -259,8 +253,6 @@
     if (hasBeenInit === false) {
       return;
     }
-
-    console.log('deactivate web-annotator');
   }
 
   document.onmouseup = handleMouseUp;
@@ -292,4 +284,5 @@
       });
     });
   });
+
 })();
