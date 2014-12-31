@@ -19,13 +19,15 @@
 
   <div class="checkbox">
     <label>
-      <input type="checkbox" ng-model="isLinksActive" id="isLinksActive"/> Links Enabled?
+      <input type="checkbox" ng-model="showPreview" id="showPreview"/> Show Preview?
     </label>
   </div>
 
+  <hr/>
+
   <div class="checkbox">
     <label>
-      <input type="checkbox" ng-model="showPreview" id="showPreview"/> Show Preview?
+      <input type="checkbox" ng-model="isLinksActive" id="isLinksActive"/> Links Enabled?
     </label>
   </div>
 
@@ -82,7 +84,10 @@
       <button type="button" class="btn btn-danger pull-right" ng-click="deleteProject(currentProject)">
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete Project
       </button>
-      <button type="button" class="btn btn-default pull-left" ng-click="saveAnnotations()">
+      <button type="button" class="btn btn-default pull-left" ng-click="installWebAnnotatorApp()" ng-if="!isAppInstalled">
+        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Install Web Annotator App
+      </button>
+      <button type="button" class="btn btn-default pull-left" ng-click="saveAnnotations()" ng-if="isAppInstalled">
         <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save Annotations
       </button>
     </div>
@@ -93,6 +98,7 @@
 <script src="scripts/angular.js" data-ng-csp></script>
 <script src="scripts/angular-bootstrap-colorpicker/angular-bootstrap-colorpicker.js"></script>
 <script src="scripts/app.js"></script>
+<script src="scripts/MyGuidProvider.js"></script>
 <script src="scripts/services/GUID.js"></script>
 <script src="scripts/helpers/appStorage.js"></script>
 <script src="scripts/services/STORAGE.js"></script>

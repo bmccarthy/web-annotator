@@ -7,6 +7,7 @@
     currentProject,
     currentTag,
     $webAnnotatorFrame,
+    isLinksActive = true,
     currentTagId = 0;
 
   var extensionUrl = chrome.extension.getURL('');
@@ -26,10 +27,11 @@
     }
 
     switch (msg.type) {
+      case 'get_isLinksActive':
+        sendResponse(isLinksActive);
+        break;
       case 'get_html':
         var html = document.documentElement.outerHTML;
-        //var html2 = $('html')[0].outerHTML;
-
         sendResponse(html);
         break;
       case 'deactivate':
@@ -42,22 +44,26 @@
         break;
       case 'activate':
         currentProject = msg.project;
-        //initialize();
         break;
       case 'isLinksActive_changed':
-        if (msg.isLinksActive === false) {
-          $('a[href]').each(function () {
-            $(this).attr('href-web-annotator', $(this).attr('href')).removeAttr('href');
-          });
-        } else {
-          $('a[href-web-annotator]').each(function () {
-            $(this).attr('href', $(this).attr('href-web-annotator')).removeAttr('href-web-annotator');
-          });
-        }
+        isLinksActive = msg.isLinksActive;
+        toggleIsLinksActive();
         break;
       default:
         console.log('unknown message: ' + JSON.stringify(msg));
         break;
+    }
+  }
+
+  function toggleIsLinksActive() {
+    if (isLinksActive === false) {
+      $('a[href]').each(function () {
+        $(this).attr('href-web-annotator', $(this).attr('href')).removeAttr('href');
+      });
+    } else {
+      $('a[href-web-annotator]').each(function () {
+        $(this).attr('href', $(this).attr('href-web-annotator')).removeAttr('href-web-annotator');
+      });
     }
   }
 

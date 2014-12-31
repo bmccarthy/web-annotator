@@ -2,7 +2,6 @@
   'use strict';
 
   var showPreview = true,
-    isLinksActive = true,
     currentProject = null,
     projects = [];
 
@@ -58,37 +57,41 @@
     }
   }
 
-  chrome.storage.sync.get('projects', function (projectsData) {
-    if (projectsData.projects == null) {
-      projects = [];
-      currentProject = null;
-      return;
-    }
-
-    projects = projectsData.projects || [];
-
-    chrome.storage.sync.get('currentProjectId', function (data) {
-      var currentProjectId = data.currentProjectId;
-
-      if (currentProjectId == null) {
+  function loadData() {
+    chrome.storage.sync.get('projects', function (projectsData) {
+      if (projectsData.projects == null) {
+        projects = [];
         currentProject = null;
         return;
       }
 
-      for (var i = 0; i < projects.length; i++) {
-        if (projects[i].id === currentProjectId) {
-          currentProject = projects[i];
+      projects = projectsData.projects || [];
+
+      chrome.storage.sync.get('currentProjectId', function (data) {
+        var currentProjectId = data.currentProjectId;
+
+        if (currentProjectId == null) {
+          currentProject = null;
           return;
         }
-      }
 
-      currentProject = null;
+        for (var i = 0; i < projects.length; i++) {
+          if (projects[i].id === currentProjectId) {
+            currentProject = projects[i];
+            return;
+          }
+        }
 
-      chrome.storage.sync.get('isActive', function (data) {
-        onIsActiveChanged(data.isActive === true);
+        currentProject = null;
+
+        chrome.storage.sync.get('isActive', function (data) {
+          onIsActiveChanged(data.isActive === true);
+        });
       });
     });
-  });
+  }
+
+  loadData();
 
   chrome.storage.onChanged.addListener(function (changes) {
     for (var key in changes) {
@@ -102,12 +105,29 @@
         case 'currentProjectId':
           onCurrentProjectChanged(changes[key].newValue);
           break;
-        case 'isLinksActive':
-          sendToEachTab({'type': 'isLinksActive_changed', 'isLinksActive': changes[key].newValue});
-          break;
         default:
           break;
       }
     }
   });
+
+  // Check whether new version is installed
+  chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason == "install") {
+
+      var guidProvider = MyGuidProvider();
+
+      var cp = {
+        id: guidProvider.getGuid(),
+        name: 'Sample Annotation Project',
+        tags: [{name: 'PERSON', color: '#EAEA46'}, {name: 'LOCATION', color: '#4646EA'}, {name: 'DATETIME', color: '#FF0508'}]
+      };
+
+      chrome.storage.sync.set({isActive: true});
+      chrome.storage.sync.set({showPreview: true});
+      chrome.storage.sync.set({currentProjectId: cp.id});
+      chrome.storage.sync.set({projects: [cp]});
+    }
+  });
+
 })();

@@ -11,77 +11,11 @@
       currentColorIndex = (currentColorIndex + 1) % possibleColors.length;
       return possibleColors[currentColorIndex];
     };
+    var webAnnotationAppId = 'gnmgpfnmpenmjohnockopbljbmpmabcg';
 
     $scope.newTag = {color: getNextColor()};
     $scope.projects = [];
-
-    chrome.storage.sync.get("isActive", function (data) {
-      $scope.$apply(function () {
-        $scope.isActive = data.isActive;
-      });
-
-      $scope.$watch("isActive", function (isActive) {
-        chrome.storage.sync.set({isActive: isActive});
-      });
-    });
-
-    chrome.storage.sync.get("showPreview", function (data) {
-      $scope.$apply(function () {
-        $scope.showPreview = data.showPreview;
-      });
-
-      $scope.$watch("showPreview", function (showPreview) {
-        chrome.storage.sync.set({showPreview: showPreview});
-      });
-    });
-
-    chrome.storage.sync.get("isLinksActive", function (data) {
-      $scope.$apply(function () {
-        $scope.isLinksActive = data.isLinksActive;
-      });
-
-      $scope.$watch("isLinksActive", function (isLinksActive) {
-        chrome.storage.sync.set({isLinksActive: isLinksActive});
-      });
-    });
-
-    chrome.storage.sync.get("currentProjectId", function (data) {
-      var currentProjectId = data.currentProjectId;
-
-      chrome.storage.sync.get("projects", function (dataProjects) {
-        $scope.$apply(function () {
-          $scope.projects = dataProjects.projects || [];
-        });
-
-        if (currentProjectId != null) {
-          for (var i = 0; i < $scope.projects.length; i++) {
-            if ($scope.projects[i].id === currentProjectId) {
-              $scope.$apply(function () {
-                $scope.currentProject = $scope.projects[i];
-              });
-
-              break;
-            }
-          }
-        }
-
-        $scope.$watch("projects", function (projects) {
-          chrome.storage.sync.set({projects: projects});
-        }, true);
-      });
-    });
-
-    chrome.storage.onChanged.addListener(function (changes) {
-      for (var key in changes) {
-        if (key === "showPreview") {
-          var storageChange = changes[key];
-
-          $scope.$apply(function () {
-            $scope.showPreview = storageChange.newValue;
-          });
-        }
-      }
-    });
+    $scope.isAppInstalled = false;
 
     $scope.deleteProject = function (project) {
       var indexOfProject = $scope.projects.indexOf(project);
@@ -118,13 +52,16 @@
     };
 
     $scope.saveAnnotations = function () {
-      var webAnnotationAppId = "gnmgpfnmpenmjohnockopbljbmpmabcg";
-
       chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {type: "get_html"}, function (response) {
-          chrome.runtime.sendMessage(webAnnotationAppId, response);
+          chrome.runtime.sendMessage(webAnnotationAppId, {type: 'save', data: response});
         });
       });
+    };
+
+    $scope.installWebAnnotatorApp = function () {
+      var appDownloadLink = "https://chrome.google.com/webstore/detail/web-annotator-app/gnmgpfnmpenmjohnockopbljbmpmabcg";
+      chrome.tabs.create({url: appDownloadLink});
     };
 
     $scope.submitNewTag = function (newTag) {
@@ -144,6 +81,89 @@
       } else {
         chrome.storage.sync.set({currentProjectId: project.id});
       }
+    };
+
+    $scope.init = function () {
+      chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {type: "get_isLinksActive"}, function (response) {
+          $scope.$apply(function () {
+            $scope.isLinksActive = response;
+          });
+
+          // after setting the current isLinksActive, set a watch on it so that future changes to the checkbox send the message to the current tab.
+          $scope.$watch('isLinksActive', function (isActive) {
+            chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+              chrome.tabs.sendMessage(tabs[0].id, {type: "isLinksActive_changed", isLinksActive: isActive});
+            });
+          });
+        });
+      });
+
+      chrome.storage.sync.get('isActive', function (data) {
+        $scope.$apply(function () {
+          $scope.isActive = data.isActive;
+        });
+
+        $scope.$watch('isActive', function (isActive) {
+          chrome.storage.sync.set({isActive: isActive});
+        });
+      });
+
+      chrome.storage.sync.get('showPreview', function (data) {
+        $scope.$apply(function () {
+          $scope.showPreview = data.showPreview;
+        });
+
+        $scope.$watch('showPreview', function (showPreview) {
+          chrome.storage.sync.set({showPreview: showPreview});
+        });
+      });
+
+      chrome.storage.sync.get('currentProjectId', function (data) {
+        var currentProjectId = data.currentProjectId;
+
+        chrome.storage.sync.get('projects', function (dataProjects) {
+          $scope.$apply(function () {
+            $scope.projects = dataProjects.projects || [];
+          });
+
+          if (currentProjectId != null) {
+            for (var i = 0; i < $scope.projects.length; i++) {
+              if ($scope.projects[i].id === currentProjectId) {
+                $scope.$apply(function () {
+                  $scope.currentProject = $scope.projects[i];
+                });
+
+                break;
+              }
+            }
+          }
+
+          $scope.$watch('projects', function (projects) {
+            chrome.storage.sync.set({projects: projects});
+          }, true);
+        });
+      });
+
+      chrome.storage.onChanged.addListener(function (changes) {
+        for (var key in changes) {
+          if (key === 'showPreview') {
+            var storageChange = changes[key];
+
+            $scope.$apply(function () {
+              $scope.showPreview = storageChange.newValue;
+            });
+          }
+        }
+      });
+
+      chrome.runtime.sendMessage(webAnnotationAppId, {type: 'ping'}, function (response) {
+        var isAppInstalled = response != null;
+
+        $scope.$apply(function () {
+          $scope.isAppInstalled = isAppInstalled;
+        });
+      });
     };
   }]);
 })();
