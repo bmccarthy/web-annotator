@@ -1,5 +1,12 @@
-var app = angular.module('web-annotator');
+/*global MyGuidProvider:false */
 
-app.factory('GUID', function () {
-  return MyGuidProvider();
-});
+(function (angular) {
+  'use strict';
+
+  var app = angular.module('web-annotator');
+
+  app.factory('GUID', function () {
+    return new MyGuidProvider();
+  });
+
+})(window.angular);

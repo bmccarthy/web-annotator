@@ -1,4 +1,9 @@
+/* exported getAppStorage */
+
+'use strict';
+
 var getAppStorage = function ($q) {
+
   return {
     get: function (key) {
       var deferred = $q.defer();

@@ -1,6 +1,11 @@
-var app = angular.module('web-annotator');
+/*global getAppStorage:false */
 
-app.factory('STORAGE', ["$q", function ($q) {
-  return getAppStorage($q);
-}]);
+(function (angular) {
+  'use strict';
 
+  var app = angular.module('web-annotator');
+
+  app.factory('STORAGE', ['$q', function ($q) {
+    return getAppStorage($q);
+  }]);
+})(window.angular);

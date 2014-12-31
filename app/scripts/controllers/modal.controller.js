@@ -1,4 +1,4 @@
-(function () {
+(function (angular) {
   'use strict';
 
   var app = angular.module('web-annotator-modal', []);
@@ -18,26 +18,28 @@
   });
 
   app.directive('ngDraggable', function () {
-    return function (scope, element, attrs) {
+    return function (scope, element) {
       element.bind('dragstart', function (e) {
 
         var style = window.getComputedStyle(e.target, null);
 
-        var left = parseInt(style.getPropertyValue("left"), 10) - e.clientX;
-        var top = parseInt(style.getPropertyValue("top"), 10) - e.clientY;
+        var left = parseInt(style.getPropertyValue('left'), 10) - e.clientX;
+        var top = parseInt(style.getPropertyValue('top'), 10) - e.clientY;
 
-        e.dataTransfer.setData("text/plain", left + ',' + top + ',' + element.attr('id'));
+        e.dataTransfer.setData('text/plain', left + ',' + top + ',' + element.attr('id'));
       });
     };
   });
 
   app.directive('ngDroppable', function () {
-    return function (scope, element, attrs) {
+    return function (scope, element) {
       element.bind('drop', function (e) {
 
-        var offset = e.dataTransfer.getData("text/plain").split(',');
+        var offset = e.dataTransfer.getData('text/plain').split(',');
 
-        if (offset.length !== 3) return;
+        if (offset.length !== 3) {
+          return;
+        }
 
         var originalLeft = parseInt(offset[0], 10);
         var originalTop = parseInt(offset[1], 10);
@@ -63,21 +65,21 @@
   app.controller('ModalController', ['$scope', '$window', function ($scope, $window) {
     $scope.tags = [];
     $scope.showPreview = false;
-    $scope.currentText = "";
-    $scope.currentTag = "";
+    $scope.currentText = '';
+    $scope.currentTag = '';
     $scope.isInEditMode = false;
 
     function getParameterByName(name) {
-      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
         results = regex.exec(location.search);
-      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
     var sendMessageToPage = function (msg) {
 
-      var pageOrigin = getParameterByName("url");
-      if (pageOrigin == null) {
+      var pageOrigin = getParameterByName('url');
+      if (!pageOrigin) {
         return;
       }
 
@@ -131,37 +133,43 @@
 
     // listen for all events from the content page
     $window.addEventListener('message', function (e) {
-      if (e.data == null) {
+      if (!e.data) {
         return;
       }
 
-      if (e.data.tags != null) {
+      if (e.data.tags) {
         $scope.$apply(function () {
           $scope.tags = e.data.tags;
         });
       }
 
-      if (e.data.currentTag != null && $scope.tags != null) {
+      if (e.data.currentTag && $scope.tags) {
+        var tag;
+
         for (var i = 0; i < $scope.tags.length; i++) {
           if ($scope.tags[i].name === e.data.currentTag) {
-            $scope.$apply(function () {
-              $scope.currentTag = $scope.tags[i];
-            });
+            tag = $scope.tags[i];
             break;
           }
         }
+
+        if (tag) {
+          $scope.$apply(function () {
+            $scope.currentTag = tag;
+          });
+        }
       }
 
-      if (e.data.showPreview != null) {
+      if (e.data.showPreview !== undefined) {
 
         $scope.$apply(function () {
           $scope.showPreview = e.data.showPreview;
         });
       }
 
-      if (e.data.action === "edit") {
+      if (e.data.action === 'edit') {
         $scope.$apply(function () {
-          $scope.action = "Edit";
+          $scope.action = 'Edit';
           $scope.isInEditMode = true;
           $scope.annotationId = e.data.annotationId;
           $scope.annotationForm.$setPristine();
@@ -170,7 +178,7 @@
       } else {
         // assume it is a new annotation if action is not specified
         $scope.$apply(function () {
-          $scope.action = "New";
+          $scope.action = 'New';
           $scope.isInEditMode = false;
           $scope.annotationForm.$setPristine();
           $scope.currentText = e.data.selectedText;
@@ -182,17 +190,13 @@
     // if this page is running in a chrome extension
     if (chrome && chrome.storage) {
       chrome.storage.onChanged.addListener(function (changes) {
-        for (var key in changes) {
-          if (key === "showPreview") {
-            var storageChange = changes[key];
-            $scope.$apply(function () {
-              $scope.showPreview = storageChange.newValue;
-            });
-            break;
-          }
+        if (changes.showPreview !== undefined) {
+          $scope.$apply(function () {
+            $scope.showPreview = changes.showPreview.newValue;
+          });
         }
       });
     }
 
   }]);
-})();
+})(window.angular);

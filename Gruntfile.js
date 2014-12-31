@@ -1,11 +1,4 @@
-// Generated on 2014-12-04 using generator-chrome-extension 0.2.11
 'use strict';
-
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
 
@@ -36,56 +29,11 @@ module.exports = function (grunt) {
         files: ['<%= config.app %>/scripts/{,*/}*.js'],
         tasks: ['jshint'],
         options: {
-          livereload: true
+          //livereload: true
         }
       },
       gruntfile: {
         files: ['Gruntfile.js']
-      },
-      styles: {
-        files: ['<%= config.app %>/styles/{,*/}*.css'],
-        tasks: [],
-        options: {
-          livereload: true
-        }
-      },
-      livereload: {
-        options: {
-          livereload: '<%= connect.options.livereload %>'
-        },
-        files: [
-          '<%= config.app %>/*.html',
-          '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-          '<%= config.app %>/manifest.json',
-          '<%= config.app %>/_locales/{,*/}*.json'
-        ]
-      }
-    },
-
-    // Grunt server and debug server setting
-    connect: {
-      options: {
-        port: 9000,
-        livereload: 35729,
-        // change this to '0.0.0.0' to access the server from outside
-        hostname: 'localhost'
-      },
-      chrome: {
-        options: {
-          open: false,
-          base: [
-            '<%= config.app %>'
-          ]
-        }
-      },
-      test: {
-        options: {
-          open: false,
-          base: [
-            'test',
-            '<%= config.app %>'
-          ]
-        }
       }
     },
 
@@ -114,16 +62,8 @@ module.exports = function (grunt) {
         'Gruntfile.js',
         '<%= config.app %>/scripts/{,*/}*.js',
         '!<%= config.app %>/scripts/vendor/*',
-        'test/spec/{,*/}*.js'
+        '!<%= config.app %>/bower_components/vendor/*'
       ]
-    },
-    mocha: {
-      all: {
-        options: {
-          run: true,
-          urls: ['http://localhost:<%= connect.options.port %>/index.html']
-        }
-      }
     },
 
     // Automatically inject Bower components into the HTML file
@@ -143,7 +83,8 @@ module.exports = function (grunt) {
         dest: '<%= config.dist %>'
       },
       html: [
-        '<%= config.app %>/popup.html'
+        '<%= config.app %>/popup.html',
+        '<%= config.app %>/web-annotator-modal-ng.html'
       ]
     },
 
@@ -200,31 +141,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/styles/main.css': [
-    //         '<%= config.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/scripts/scripts.js': [
-    //         '<%= config.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
-
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
@@ -234,12 +150,12 @@ module.exports = function (grunt) {
           cwd: '<%= config.app %>',
           dest: '<%= config.dist %>',
           src: [
-            '*.{ico,png,txt}',
-            'images/{,*/}*.{webp,gif}',
+            'icons/*.{ico,png}',
             '{,*/}*.html',
-            'styles/{,*/}*.css',
-            'styles/fonts/{,*/}*.*',
+            'styles/**/*.css',
+            'styles/bootstrap/fonts/*.{eot,svg,ttf,woff}',
             '_locales/{,*/}*.json',
+            'components/**'
           ]
         }]
       }
@@ -261,12 +177,13 @@ module.exports = function (grunt) {
     chromeManifest: {
       dist: {
         options: {
-          buildnumber: true,
+          buildnumber: 'both',
           background: {
             target: 'scripts/background.js',
             exclude: [
             ]
-          }
+          },
+          removeFields: ['key']
         },
         src: '<%= config.app %>',
         dest: '<%= config.dist %>'
@@ -279,7 +196,7 @@ module.exports = function (grunt) {
         options: {
           archive: function() {
             var manifest = grunt.file.readJSON('app/manifest.json');
-            return 'package/annotator 2-' + manifest.version + '.zip';
+            return 'package/web-annotator-' + manifest.version + '.zip';
           }
         },
         files: [{
@@ -295,23 +212,15 @@ module.exports = function (grunt) {
   grunt.registerTask('debug', function () {
     grunt.task.run([
       'jshint',
-      'concurrent:chrome',
-      'connect:chrome',
       'watch'
     ]);
   });
-
-  grunt.registerTask('test', [
-    'connect:test',
-    'mocha'
-  ]);
 
   grunt.registerTask('build', [
     'clean:dist',
     'chromeManifest:dist',
     'useminPrepare',
     'concurrent:dist',
-    'cssmin',
     'concat',
     'uglify',
     'copy',
@@ -321,7 +230,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'jshint',
-    'test',
     'build'
   ]);
 };

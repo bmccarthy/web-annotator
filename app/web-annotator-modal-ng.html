@@ -2,38 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link href="styles/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <link href="styles/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
-  <style>
-    [draggable] {
-      cursor: pointer;
-    }
-
-    #newAnnotation {
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
-
-    #backdrop {
-      opacity: 0.4;
-      background-color: green;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-    }
-
-    body {
-      background: transparent;
-    }
-
-    #web-annotator-modal{
-      display: block;
-    }
-
-  </style>
+  <link href="components/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="components/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+  <link href="styles/annotatorModal.css" rel="stylesheet">
 </head>
 <body ng-app="web-annotator-modal" ng-controller="ModalController" ng-escape="closeModal()">
 
@@ -76,7 +47,10 @@
   </div>
 </div>
 
-<script src="scripts/angular.js" data-ng-csp></script>
+<script src="components/angular/angular.js" data-ng-csp></script>
+
+<!-- build:js scripts/annotatorModal.js -->
 <script src="scripts/controllers/modal.controller.js"></script>
+<!-- endbuild -->
 </body>
 </html>

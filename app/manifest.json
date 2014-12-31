@@ -1,49 +1,51 @@
 {
-  "name": "__MSG_appName__",
-  "version": "0.0.3",
-  "manifest_version": 2,
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtrDXDVtwFV7BQqpb88P+FuBTJEo9qNbiAN2OdmX54cnUrOOT2nCTtWok3iYdd+CK878LUjt1YijXXJLPboAbc7y+kKrtSUzitrKJ6viJRuxaW7CMkFLiYjX+F5kVbSG7dDljTd9yOD6Tc5tZo7czUChVueAcUzlhTJi2jMl76ss25JtF7FX/LrBmRfpvxNQWrdeJgGXiZEl61yE9IZeUfjyDrOHFP3PAEQ44W/z5wBc9i6RyPrRavYWChCkdPwFuVYk2UBWZfQo3PEMEys0dzu4pHZv7aYxL0FFbtyQS6Pd637F0sPGgx/kxAXKpUO5K20hGFGpC12y/qgn6bnjOgwIDAQAB",
-  "description": "__MSG_appDescription__",
-  "icons": {
-    "16": "icons/icon-16.png",
-    "128": "icons/icon-128.png"
-  },
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-  "default_locale": "en",
-  "background": {
-    "scripts": [
-      "scripts/MyGuidProvider.js",
-      "scripts/background.js"
-    ]
-  },
-  "browser_action": {
-    "default_icon": {
-      "19": "icons/icon-19.png",
-      "38": "icons/icon-38.png"
+    "name": "__MSG_appName__",
+    "version": "0.0.3",
+    "manifest_version": 2,
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtrDXDVtwFV7BQqpb88P+FuBTJEo9qNbiAN2OdmX54cnUrOOT2nCTtWok3iYdd+CK878LUjt1YijXXJLPboAbc7y+kKrtSUzitrKJ6viJRuxaW7CMkFLiYjX+F5kVbSG7dDljTd9yOD6Tc5tZo7czUChVueAcUzlhTJi2jMl76ss25JtF7FX/LrBmRfpvxNQWrdeJgGXiZEl61yE9IZeUfjyDrOHFP3PAEQ44W/z5wBc9i6RyPrRavYWChCkdPwFuVYk2UBWZfQo3PEMEys0dzu4pHZv7aYxL0FFbtyQS6Pd637F0sPGgx/kxAXKpUO5K20hGFGpC12y/qgn6bnjOgwIDAQAB",
+    "description": "__MSG_appDescription__",
+    "icons": {
+        "16": "icons/icon-16.png",
+        "128": "icons/icon-128.png"
     },
-    "default_title": "Web Annotator",
-    "default_popup": "popup.html"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": [
-        "scripts/jquery-2.1.1.js",
-        "scripts/rangy/rangy-core.js",
-        "scripts/rangy/rangy-classapplier.js",
-        "scripts/contentscript.js"
-      ],
-      "run_at": "document_end",
-      "all_frames": false
-    }
-  ],
-  "web_accessible_resources": [
-    "web-annotator-modal-ng.html",
-    "styles/bootstrap/css/bootstrap.min.css"
-  ],
-  "permissions": [
-    "tabs",
-    "<all_urls>",
-    "storage"
-  ]
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+    "default_locale": "en",
+    "background": {
+        "scripts": [
+            "scripts/MyGuidProvider.js",
+            "scripts/background.js"
+        ]
+    },
+    "browser_action": {
+        "default_icon": {
+            "19": "icons/icon-19.png",
+            "38": "icons/icon-38.png"
+        },
+        "default_title": "Web Annotator",
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "components/jquery/jquery-2.1.1.js",
+                "components/rangy/rangy-core.js",
+                "components/rangy/rangy-classapplier.js",
+                "scripts/contentscript.js"
+            ],
+            "run_at": "document_end",
+            "all_frames": false
+        }
+    ],
+    "web_accessible_resources": [
+        "web-annotator-modal-ng.html",
+        "styles/bootstrap/css/bootstrap.min.css"
+    ],
+    "permissions": [
+        "tabs",
+        "<all_urls>",
+        "storage"
+    ]
 }

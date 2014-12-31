@@ -1,11 +1,11 @@
-(function () {
+(function (angular) {
   'use strict';
 
   var app = angular.module('web-annotator');
 
-  app.controller('MainController', ['$scope', "GUID", function ($scope, GUID) {
+  app.controller('MainController', ['$scope', 'GUID', function ($scope, GUID) {
     var currentColorIndex = -1;
-    var possibleColors = ["#ffff00", "#c30006", "#8329FD", "#8fbc8f"];
+    var possibleColors = ['#ffff00', '#c30006', '#8329FD', '#8fbc8f'];
 
     var getNextColor = function () {
       currentColorIndex = (currentColorIndex + 1) % possibleColors.length;
@@ -22,7 +22,7 @@
       $scope.projects.splice(indexOfProject, 1);
       $scope.currentProject = null;
 
-      chrome.storage.sync.remove("currentProjectId");
+      chrome.storage.sync.remove('currentProjectId');
     };
 
     $scope.submitNewProject = function (projectName) {
@@ -43,7 +43,7 @@
     };
 
     $scope.isNew = function () {
-      return $scope.currentProject == null;
+      return $scope.currentProject === null || $scope.currentProject === undefined;
     };
 
     $scope.deleteTag = function (tag) {
@@ -53,14 +53,14 @@
 
     $scope.saveAnnotations = function () {
       chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {type: "get_html"}, function (response) {
+        chrome.tabs.sendMessage(tabs[0].id, {type: 'get_html'}, function (response) {
           chrome.runtime.sendMessage(webAnnotationAppId, {type: 'save', data: response});
         });
       });
     };
 
     $scope.installWebAnnotatorApp = function () {
-      var appDownloadLink = "https://chrome.google.com/webstore/detail/web-annotator-app/gnmgpfnmpenmjohnockopbljbmpmabcg";
+      var appDownloadLink = 'https://chrome.google.com/webstore/detail/web-annotator-app/gnmgpfnmpenmjohnockopbljbmpmabcg';
       chrome.tabs.create({url: appDownloadLink});
     };
 
@@ -76,8 +76,8 @@
     };
 
     $scope.projectChanged = function (project) {
-      if (project == null) {
-        chrome.storage.sync.remove("currentProjectId");
+      if (project === null || project === undefined) {
+        chrome.storage.sync.remove('currentProjectId');
       } else {
         chrome.storage.sync.set({currentProjectId: project.id});
       }
@@ -85,7 +85,7 @@
 
     $scope.init = function () {
       chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {type: "get_isLinksActive"}, function (response) {
+        chrome.tabs.sendMessage(tabs[0].id, {type: 'get_isLinksActive'}, function (response) {
           $scope.$apply(function () {
             $scope.isLinksActive = response;
           });
@@ -93,7 +93,7 @@
           // after setting the current isLinksActive, set a watch on it so that future changes to the checkbox send the message to the current tab.
           $scope.$watch('isLinksActive', function (isActive) {
             chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-              chrome.tabs.sendMessage(tabs[0].id, {type: "isLinksActive_changed", isLinksActive: isActive});
+              chrome.tabs.sendMessage(tabs[0].id, {type: 'isLinksActive_changed', isLinksActive: isActive});
             });
           });
         });
@@ -127,15 +127,20 @@
             $scope.projects = dataProjects.projects || [];
           });
 
-          if (currentProjectId != null) {
+          if (currentProjectId) {
+            var currentProject;
+
             for (var i = 0; i < $scope.projects.length; i++) {
               if ($scope.projects[i].id === currentProjectId) {
-                $scope.$apply(function () {
-                  $scope.currentProject = $scope.projects[i];
-                });
-
+                currentProject = $scope.projects[i];
                 break;
               }
+            }
+
+            if (currentProject) {
+              $scope.$apply(function () {
+                $scope.currentProject = currentProject;
+              });
             }
           }
 
@@ -146,19 +151,16 @@
       });
 
       chrome.storage.onChanged.addListener(function (changes) {
-        for (var key in changes) {
-          if (key === 'showPreview') {
-            var storageChange = changes[key];
 
-            $scope.$apply(function () {
-              $scope.showPreview = storageChange.newValue;
-            });
-          }
+        if (changes.showPreview !== undefined) {
+          $scope.$apply(function () {
+            $scope.showPreview = changes.showPreview.newValue;
+          });
         }
       });
 
       chrome.runtime.sendMessage(webAnnotationAppId, {type: 'ping'}, function (response) {
-        var isAppInstalled = response != null;
+        var isAppInstalled = response !== undefined;
 
         $scope.$apply(function () {
           $scope.isAppInstalled = isAppInstalled;
@@ -166,4 +168,4 @@
       });
     };
   }]);
-})();
+})(window.angular);

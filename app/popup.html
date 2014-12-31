@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link href="styles/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <link href="styles/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
-  <link href="styles/angular-bootstrap-colorpicker/angular-bootstrap-colorpicker.css" rel="stylesheet">
+  <link href="components/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="components/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+  <link href="components/angular-bootstrap-colorpicker/css/angular-bootstrap-colorpicker.css" rel="stylesheet">
   <link href="styles/main.css" rel="stylesheet">
-  <script src="scripts/analytics.js"></script>
 </head>
 <body ng-app="web-annotator">
 
@@ -95,13 +94,17 @@
 
 </div>
 
-<script src="scripts/angular.js" data-ng-csp></script>
-<script src="scripts/angular-bootstrap-colorpicker/angular-bootstrap-colorpicker.js"></script>
+<script src="components/angular/angular.js" data-ng-csp></script>
+<script src="components/angular-bootstrap-colorpicker/scripts/angular-bootstrap-colorpicker.js"></script>
+
+<!-- build:js scripts/popup.js -->
+<script src="scripts/analytics.js"></script>
 <script src="scripts/app.js"></script>
 <script src="scripts/MyGuidProvider.js"></script>
 <script src="scripts/services/GUID.js"></script>
 <script src="scripts/helpers/appStorage.js"></script>
 <script src="scripts/services/STORAGE.js"></script>
 <script src="scripts/controllers/main.controller.js"></script>
+<!-- endbuild -->
 </body>
 </html>

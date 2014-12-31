@@ -1,8 +1,9 @@
+/*global MyGuidProvider:false */
+
 (function () {
   'use strict';
 
-  var showPreview = true,
-    currentProject = null,
+  var currentProject = null,
     projects = [];
 
   function updateBadge(isActive) {
@@ -20,7 +21,7 @@
   function onIsActiveChanged(active) {
     updateBadge(active);
 
-    if (currentProject == null) {
+    if (!currentProject) {
       return;
     }
 
@@ -52,14 +53,14 @@
   function onProjectsChanged(newProjects) {
     projects = newProjects;
 
-    if (currentProject != null) {
+    if (currentProject) {
       onCurrentProjectChanged(currentProject.id);
     }
   }
 
   function loadData() {
     chrome.storage.sync.get('projects', function (projectsData) {
-      if (projectsData.projects == null) {
+      if (!projectsData.projects) {
         projects = [];
         currentProject = null;
         return;
@@ -70,7 +71,7 @@
       chrome.storage.sync.get('currentProjectId', function (data) {
         var currentProjectId = data.currentProjectId;
 
-        if (currentProjectId == null) {
+        if (!currentProjectId) {
           currentProject = null;
           return;
         }
@@ -113,9 +114,9 @@
 
   // Check whether new version is installed
   chrome.runtime.onInstalled.addListener(function (details) {
-    if (details.reason == "install") {
+    if (details.reason === 'install') {
 
-      var guidProvider = MyGuidProvider();
+      var guidProvider = new MyGuidProvider();
 
       var cp = {
         id: guidProvider.getGuid(),

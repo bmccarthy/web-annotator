@@ -1,5 +1,4 @@
-(function () {
-
+(function ($, rangy) {
   'use strict';
 
   var hasBeenInit = false,
@@ -77,7 +76,7 @@
 
     var tags = [];
 
-    if (currentProject != null && currentProject.tags != null) {
+    if (currentProject && currentProject.tags) {
       tags = currentProject.tags;
     }
 
@@ -135,12 +134,12 @@
    */
   function tagCurrentText(tag) {
 
-    if (tag == null || tag == '') {
+    if (!tag || tag === '') {
       return;
     }
 
-    if (allTagAppliers == null || allTagAppliers[tag] == null) {
-      throw Error('tag css class applier not found!');
+    if (!allTagAppliers || !allTagAppliers[tag]) {
+      throw new Error('tag css class applier not found!');
     }
 
     currentTagId++;
@@ -169,7 +168,7 @@
 
     $('body').on('keyup', function (e) {
       // hide the modal on escape
-      if (e.keyCode == 27) {
+      if (e.keyCode === 27) {
         hideModal();
       }
     });
@@ -180,18 +179,18 @@
         return;
       }
 
-      if (e.data.newAnnotation != null) {
+      if (e.data.newAnnotation) {
         currentTag = e.data.newAnnotation.tag;
         tagCurrentText(e.data.newAnnotation.tag);
       }
 
-      if (e.data.editAnnotation != null) {
+      if (e.data.editAnnotation) {
         $('web-annotation[annotation-id=' + e.data.editAnnotation.annotationId + ']')
           .attr('tag', e.data.editAnnotation.tag)
           .attr('title', e.data.editAnnotation.tag);
       }
 
-      if (e.data.deleteAnnotation != null) {
+      if (e.data.deleteAnnotation) {
         $('web-annotation[annotation-id=' + e.data.deleteAnnotation.annotationId + ']')
           .contents()
           .unwrap();
@@ -207,7 +206,7 @@
       return;
     }
 
-    if (currentProject == null) {
+    if (!currentProject) {
       return;
     }
 
@@ -215,14 +214,13 @@
       initialize();
     }
 
-    if ($(e.target).is("web-annotation")) {
-      var annotationId = $(e.target).attr("annotation-id");
-      var annotationText = $("web-annotation[annotation-id=" + annotationId + "]").text();
-      var annotationTag = $(e.target).attr("tag");
-
+    if ($(e.target).is('web-annotation')) {
+      var annotationId = $(e.target).attr('annotation-id');
+      var annotationText = $('web-annotation[annotation-id=' + annotationId + ']').text();
+      var annotationTag = $(e.target).attr('tag');
 
       chrome.storage.sync.get('showPreview', function (data) {
-        var showPreview = data.showPreview == null || data.showPreview === true;
+        var showPreview = data.showPreview === undefined || data.showPreview === true;
 
         $webAnnotatorFrame[0].contentWindow.postMessage({
           tags: currentProject.tags,
@@ -230,7 +228,7 @@
           selectedText: annotationText,
           showPreview: showPreview,
           annotationId: annotationId,
-          action: "edit"
+          action: 'edit'
         }, extensionUrl);
 
         // actually display the modal by positioning and displaying the iframe
@@ -248,9 +246,9 @@
     }
 
     chrome.storage.sync.get('showPreview', function (data) {
-      var showPreview = data.showPreview == null || data.showPreview === true;
+      var showPreview = data.showPreview === undefined || data.showPreview === true;
 
-      if (showPreview === true || currentTag == null || currentTag.trim() == '') {
+      if (showPreview === true || !currentTag || currentTag.trim() === '') {
         // set up the modal with the data it needs to display
         $webAnnotatorFrame[0].contentWindow.postMessage({
           tags: currentProject.tags,
@@ -283,12 +281,12 @@
     }
 
     chrome.storage.sync.get('currentProjectId', function (currentProjectData) {
-      if (currentProjectData.currentProjectId == null) {
+      if (!currentProjectData.currentProjectId) {
         return;
       }
 
       chrome.storage.sync.get('projects', function (projectsData) {
-        if (projectsData.projects == null) {
+        if (!projectsData.projects) {
           return;
         }
 
@@ -303,4 +301,4 @@
     });
   });
 
-})();
+})(window.$, window.rangy);
