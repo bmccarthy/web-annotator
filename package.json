@@ -1,27 +1,22 @@
 {
-  "name": "Web Annotator",
-  "version": "0.0.3",
+  "name": "Web-Annotator",
+  "version": "0.0.9",
+  "description": "Web annotation tool",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bmccarthy/web-annotator.git"
+  },
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.4.0",
-    "grunt-contrib-jshint": "~0.9.2",
-    "grunt-contrib-connect": "~0.7.1",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-htmlmin": "~0.2.0",
-    "grunt-bower-install": "~1.0.0",
-    "grunt-contrib-imagemin": "~0.7.1",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-usemin": "~2.1.0",
-    "grunt-svgmin": "~0.4.0",
-    "grunt-concurrent": "~0.5.0",
-    "load-grunt-tasks": "~0.4.0",
-    "time-grunt": "~0.3.1",
-    "jshint-stylish": "~0.1.5",
-    "grunt-chrome-manifest": "~0.2.0",
-    "grunt-contrib-compress": "~0.9.1"
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-bump": "^0.1.11",
+    "gulp-cleanhtml": "^0.1.0",
+    "gulp-jshint": "^1.9.0",
+    "gulp-minify-css": "^0.3.11",
+    "gulp-strip-debug": "^1.0.2",
+    "gulp-uglify": "^1.0.2",
+    "gulp-zip": "^2.0.2"
   },
   "engines": {
     "node": ">=0.8.0"
