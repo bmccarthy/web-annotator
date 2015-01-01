@@ -1,6 +1,6 @@
 {
     "name": "__MSG_appName__",
-    "version": "0.0.9",
+    "version": "0.0.11",
     "manifest_version": 2,
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtrDXDVtwFV7BQqpb88P+FuBTJEo9qNbiAN2OdmX54cnUrOOT2nCTtWok3iYdd+CK878LUjt1YijXXJLPboAbc7y+kKrtSUzitrKJ6viJRuxaW7CMkFLiYjX+F5kVbSG7dDljTd9yOD6Tc5tZo7czUChVueAcUzlhTJi2jMl76ss25JtF7FX/LrBmRfpvxNQWrdeJgGXiZEl61yE9IZeUfjyDrOHFP3PAEQ44W/z5wBc9i6RyPrRavYWChCkdPwFuVYk2UBWZfQo3PEMEys0dzu4pHZv7aYxL0FFbtyQS6Pd637F0sPGgx/kxAXKpUO5K20hGFGpC12y/qgn6bnjOgwIDAQAB",
     "description": "__MSG_appDescription__",
@@ -30,7 +30,7 @@
                 "<all_urls>"
             ],
             "js": [
-                "bower_components/jquery/jquery.min.js",
+                "bower_components/jquery/dist/jquery.min.js",
                 "bower_components/rangy-official/rangy-core.min.js",
                 "bower_components/rangy-official/rangy-classapplier.min.js",
                 "scripts/contentscript.js"
