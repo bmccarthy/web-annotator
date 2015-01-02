@@ -53,7 +53,7 @@ gulp.task('copy', ['bump'], function () {
 
 //run scripts through JSHint
 gulp.task('jshint', function () {
-  return gulp.src(['app/scripts/**/*.js', 'Gulpfile.js'])
+  return gulp.src([appFolder + 'scripts/**/*.js', 'Gulpfile.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -61,19 +61,13 @@ gulp.task('jshint', function () {
 gulp.task('chromeManifest', function () {
   var manifest = require(appFolder + 'manifest');
 
-  var backgroundScripts = manifest.background.scripts;
-  backgroundScripts.push('!bower_components/**');
-
-  gulp.src(backgroundScripts, {cwd: appFolder})
+  gulp.src(manifest.background.scripts.concat(['!bower_components/**']), {cwd: appFolder})
     .pipe(stripdebug())
     .pipe(uglify())
     .pipe(gulp.dest('build/scripts'));
 
   for (var i = 0; i < manifest.content_scripts.length; i++) { // jshint ignore:line
-    var contentScripts = manifest.content_scripts[i].js || []; // jshint ignore:line
-    contentScripts.push('!bower_components/**');
-
-    gulp.src(contentScripts, {cwd: appFolder})
+    gulp.src(manifest.content_scripts[i].js.concat(['!bower_components/**']), {cwd: appFolder}) // jshint ignore:line
       .pipe(stripdebug())
       .pipe(uglify())
       .pipe(gulp.dest('build/scripts'));
@@ -82,20 +76,20 @@ gulp.task('chromeManifest', function () {
 
 //copy vendor scripts
 gulp.task('scripts', ['jshint'], function () {
-  gulp.src('app/bower_components/angular/*.min.js')
+  gulp.src(appFolder + 'bower_components/angular/*.min.js')
     .pipe(gulp.dest('build/bower_components/angular'));
-  gulp.src('app/bower_components/angular-bootstrap-colorpicker/**/{*.min.css,*.png,*.min.js}')
+  gulp.src(appFolder + 'bower_components/angular-bootstrap-colorpicker/**/{*.min.css,*.png,*.min.js}')
     .pipe(gulp.dest('build/bower_components/angular-bootstrap-colorpicker'));
 
-  gulp.src('app/bower_components/bootstrap/dist/fonts/**')
+  gulp.src(appFolder + 'bower_components/bootstrap/dist/fonts/**')
     .pipe(gulp.dest('build/bower_components/bootstrap/dist/fonts'));
-  gulp.src('app/bower_components/bootstrap/dist/**/{*.min.css,*.min.js}')
+  gulp.src(appFolder + 'bower_components/bootstrap/dist/**/{*.min.css,*.min.js}')
     .pipe(gulp.dest('build/bower_components/bootstrap/dist'));
 
-  gulp.src('app/bower_components/jquery/dist/*.min.js')
+  gulp.src(appFolder + 'bower_components/jquery/dist/*.min.js')
     .pipe(gulp.dest('build/bower_components/jquery/dist'));
 
-  return gulp.src('app/bower_components/rangy-official/*.min.js')
+  return gulp.src(appFolder + 'bower_components/rangy-official/*.min.js')
     .pipe(gulp.dest('build/bower_components/rangy-official'));
 });
 
